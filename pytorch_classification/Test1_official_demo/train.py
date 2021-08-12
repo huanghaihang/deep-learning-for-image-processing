@@ -39,7 +39,7 @@ def main():
     loss_function = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), lr=0.001)
 #训练过程
-    for epoch in range(5):  # loop over the dataset multiple times
+    for epoch in range(5):  # loop over the dataset multiple times  epoch指整个数据集迭代多少次， step是指一个step中循环到多少步了
 
         running_loss = 0.0
         for step, data in enumerate(train_loader, start=0):#enumerate不仅可以返回每一批的data，还会返回对应的step
