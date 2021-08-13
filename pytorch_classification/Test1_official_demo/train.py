@@ -68,9 +68,9 @@ def main():
 
     print('Finished Training')
 
-#     save_path = './Lenet.pth'
-#     torch.save(net.state_dict(), save_path)
-#
-#
+    save_path = './Lenet.pth'
+    torch.save(net.state_dict(), save_path)
+
+
 if __name__ == '__main__':
     main()
