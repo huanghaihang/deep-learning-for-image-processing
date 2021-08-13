@@ -4,7 +4,7 @@ from PIL import Image
 
 from model import LeNet
 
-
+#调用训练好的模型权重(Lenet.pth)进行预测
 def main():
     transform = transforms.Compose(
         [transforms.Resize((32, 32)),
@@ -24,7 +24,10 @@ def main():
     with torch.no_grad():
         outputs = net(im)
         predict = torch.max(outputs, dim=1)[1].data.numpy()
-    print(classes[int(predict)])
+        # predict = torch.softmax(outputs, dim=1)用softmax的方法
+        # predict = torch.argmax(predict).data.numpy()
+        # print(predict)
+    print(classes[int(predict)])#索引
 
 
 if __name__ == '__main__':

@@ -11,14 +11,14 @@ from model import AlexNet
 
 def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
+#还是先定义一个预处理函数
     data_transform = transforms.Compose(
         [transforms.Resize((224, 224)),
          transforms.ToTensor(),
          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
     # load image
-    img_path = "../tulip.jpg"
+    img_path = "2.jfif"
     assert os.path.exists(img_path), "file: '{}' dose not exist.".format(img_path)
     img = Image.open(img_path)
 

@@ -34,16 +34,16 @@ class AlexNet(nn.Module):
 
     def forward(self, x):
         x = self.features(x)
-        x = torch.flatten(x, start_dim=1)
+        x = torch.flatten(x, start_dim=1)#展平
         x = self.classifier(x)
         return x
 
     def _initialize_weights(self):
-        for m in self.modules():
-            if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+        for m in self.modules():#通过self.modules遍历我们前面创建的每一个层结构
+            if isinstance(m, nn.Conv2d):#判断层结构的类型
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')#kaiming_normal初始化变量方法
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0)
             elif isinstance(m, nn.Linear):
-                nn.init.normal_(m.weight, 0, 0.01)
-                nn.init.constant_(m.bias, 0)
+                nn.init.normal_(m.weight, 0, 0.01)#如果是全链接层， 通过normal正态分布赋值均值0，方差0.01
+                nn.init.constant_(m.bias, 0)#偏置初始0

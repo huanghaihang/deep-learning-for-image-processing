@@ -13,19 +13,19 @@ from model import AlexNet
 
 
 def main():
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")#指定训练过程中使用的设备
     print("using {} device.".format(device))
 
     data_transform = {
         "train": transforms.Compose([transforms.RandomResizedCrop(224),
-                                     transforms.RandomHorizontalFlip(),
+                                     transforms.RandomHorizontalFlip(),#水平翻转
                                      transforms.ToTensor(),
                                      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]),
         "val": transforms.Compose([transforms.Resize((224, 224)),  # cannot 224, must (224, 224)
                                    transforms.ToTensor(),
                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])}
 
-    data_root = os.path.abspath(os.path.join(os.getcwd(), "../.."))  # get data root path
+    data_root = os.path.abspath(os.path.join(os.getcwd(), "../.."))  # get data root path（getcwd获取当前文件所在目录）
     image_path = os.path.join(data_root, "data_set", "flower_data")  # flower data set path
     assert os.path.exists(image_path), "{} path does not exist.".format(image_path)
     train_dataset = datasets.ImageFolder(root=os.path.join(image_path, "train"),
@@ -34,9 +34,9 @@ def main():
 
     # {'daisy':0, 'dandelion':1, 'roses':2, 'sunflower':3, 'tulips':4}
     flower_list = train_dataset.class_to_idx
-    cla_dict = dict((val, key) for key, val in flower_list.items())
+    cla_dict = dict((val, key) for key, val in flower_list.items())#遍历，把名字和对应的数字反过来{0:'daisy', 1}
     # write dict into json file
-    json_str = json.dumps(cla_dict, indent=4)
+    json_str = json.dumps(cla_dict, indent=4)#编码成json的格式
     with open('class_indices.json', 'w') as json_file:
         json_file.write(json_str)
 
@@ -52,7 +52,7 @@ def main():
                                             transform=data_transform["val"])
     val_num = len(validate_dataset)
     validate_loader = torch.utils.data.DataLoader(validate_dataset,
-                                                  batch_size=4, shuffle=False,
+                                                  batch_size=batch_size, shuffle=False,
                                                   num_workers=nw)
 
     print("using {} images for training, {} images for validation.".format(train_num,
@@ -109,15 +109,15 @@ def main():
                 val_images, val_labels = val_data
                 outputs = net(val_images.to(device))
                 predict_y = torch.max(outputs, dim=1)[1]
-                acc += torch.eq(predict_y, val_labels.to(device)).sum().item()
+                acc += torch.eq(predict_y, val_labels.to(device)).sum().item()#预测对了等于1，错了为0
 
-        val_accurate = acc / val_num
-        print('[epoch %d] train_loss: %.3f  val_accuracy: %.3f' %
-              (epoch + 1, running_loss / train_steps, val_accurate))
+            val_accurate = acc / val_num
+            print('[epoch %d] train_loss: %.3f  val_accuracy: %.3f' %
+                  (epoch + 1, running_loss / train_steps, val_accurate))
 
-        if val_accurate > best_acc:
-            best_acc = val_accurate
-            torch.save(net.state_dict(), save_path)
+            if val_accurate > best_acc:
+                best_acc = val_accurate
+                torch.save(net.state_dict(), save_path)
 
     print('Finished Training')
 
