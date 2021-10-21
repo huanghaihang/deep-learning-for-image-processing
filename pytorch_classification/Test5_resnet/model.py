@@ -33,7 +33,7 @@ class BasicBlock(nn.Module):
 
         return out
 
-
+#（256，64，）
 class Bottleneck(nn.Module):
     """
     注意：原论文中，在虚线残差结构的主分支上，第一个1x1卷积层的步距是2，第二个3x3卷积层步距是1。
@@ -84,7 +84,7 @@ class Bottleneck(nn.Module):
 
         return out
 
-
+#return ResNet(Bottleneck, [3, 4, 6, 3], num_classes=1000, include_top=include_top)
 class ResNet(nn.Module):
 
     def __init__(self,
@@ -118,6 +118,7 @@ class ResNet(nn.Module):
             if isinstance(m, nn.Conv2d):
                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
 
+#_make_layer(Bottleneck, 64, blocks_num[0]=3)
     def _make_layer(self, block, channel, block_num, stride=1):
         downsample = None
         if stride != 1 or self.in_channel != channel * block.expansion:
@@ -132,8 +133,8 @@ class ResNet(nn.Module):
                             stride=stride,
                             groups=self.groups,
                             width_per_group=self.width_per_group))
-        self.in_channel = channel * block.expansion
-
+        self.in_channel = channel * block.expansion#256
+#（，128）
         for _ in range(1, block_num):
             layers.append(block(self.in_channel,
                                 channel,
